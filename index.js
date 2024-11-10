@@ -33,6 +33,7 @@ client.on(Events.MessageCreate, async (message) => {
     if (!member.permissions.has(PermissionFlagsBits.Administrator)) return;
 
     const [cmdName] = content.split(" ");
+    console.log(content);
 
     if (cmdName === "!viewChannels")
       return await message.reply(
@@ -46,7 +47,7 @@ client.on(Events.MessageCreate, async (message) => {
       );
 
     if (cmdName === "!setChannels") {
-      console.log(mentions.channels.size);
+      console.log(mentions.channels);
 
       if (mentions.channels.size < 2)
         return await message.reply(
