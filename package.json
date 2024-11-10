@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "discord.js": "^14.16.3"
+  },
+  "scripts": {
+    "start": "node --env-file=.env index.js",
+    "dev": "nodemon --env-file=.env index.js --ignore data.json"
+  }
+}
