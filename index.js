@@ -20,7 +20,9 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, (readyClient) => {
-  console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+  console.log(
+    `Ready! Logged in as ${readyClient.user.tag} (${readyClient.user.id})`
+  );
 });
 
 client.on(Events.MessageCreate, async (message) => {
