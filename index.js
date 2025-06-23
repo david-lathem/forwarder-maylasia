@@ -85,9 +85,6 @@ client.on(Events.MessageCreate, async (message) => {
 
     embed.data.url = undefined;
 
-    console.log(channel.id);
-    console.log(channelOne);
-
     if (channel.id === channelOne) {
       embed.data.description = embed.data.fields?.[1]?.value?.replace(
         "Click Here",
