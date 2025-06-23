@@ -3,6 +3,7 @@ const {
   GatewayIntentBits,
   Events,
   PermissionFlagsBits,
+  EmbedBuilder,
 } = require("discord.js");
 const fs = require("fs/promises");
 const data = require("./data.json");
@@ -76,34 +77,37 @@ client.on(Events.MessageCreate, async (message) => {
 
     if (!embed) return;
 
-    embed.data.footer = {
+    const modifiedEmbed = EmbedBuilder.from(embed)
+      .setTitle("OOS Bypass Link has arrived")
+      .setColor("Orange")
+      .setThumbnail(null)
+      .setURL(null)
+      .setFields([])
+      .setTimestamp();
+
+    if (channel.id === channelOne) {
+      modifiedEmbed.setDescription(
+        embed.data.fields?.[1]?.value?.replace(
+          "Click Here",
+          "Click Here to redirect"
+        )
+      );
+    } else if (channel.id === channelTwo) {
+      modifiedEmbed.setDescription(
+        embed.data.description.replace("Share Link", "Click Here to redirect")
+      );
+    }
+
+    modifiedEmbed.data.footer = {
       text: "OOS Ticketing",
       icon_url: "attachment://footer.jpg",
     };
-    embed.data.title = "OOS Bypass Link has arrived";
-    embed.data.thumbnail = null;
-
-    embed.data.url = undefined;
-
-    if (channel.id === channelOne) {
-      embed.data.description = embed.data.fields?.[1]?.value?.replace(
-        "Click Here",
-        "Click Here to redirect"
-      );
-    } else if (channel.id === channelTwo) {
-      embed.data.description = `${embed.data.description.replace(
-        "Share Link",
-        "Click Here to redirect"
-      )}`;
-    }
-
-    embed.data.fields = undefined;
 
     const destChannel = await client.channels.fetch(destinationChannel);
 
     await destChannel.send({
       content,
-      embeds: [embed],
+      embeds: [modifiedEmbed],
       files: ["./assets/footer.jpg"],
     });
   } catch (error) {
