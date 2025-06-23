@@ -84,23 +84,22 @@ client.on(Events.MessageCreate, async (message) => {
     embed.data.thumbnail = null;
 
     if (channel.id === channelTwo) {
-      embed.data.title = undefined;
       embed.data.url = undefined;
     }
 
-    let link;
-
     if (channel.id === channelOne) {
-      link = embed.data.fields?.[1]?.value;
+      embed.description = embed.data.fields?.[1]?.value?.replace(
+        "Click Here",
+        "Click Here to redirect"
+      );
     } else if (channel.id === channelTwo) {
-      link = embed.data.fields?.[0]?.value;
+      embed.description = `${embed.data.description.replace(
+        "Share Link",
+        "Click Here to redirect"
+      )}`;
     }
 
     embed.data.fields = undefined;
-    embed.data.description = link.replace(
-      "Click Here",
-      "Click Here to redirect"
-    );
 
     const destChannel = await client.channels.fetch(destinationChannel);
 
