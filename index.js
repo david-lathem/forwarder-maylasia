@@ -83,9 +83,7 @@ client.on(Events.MessageCreate, async (message) => {
     embed.data.title = "OOS Bypass Link has arrived";
     embed.data.thumbnail = null;
 
-    if (channel.id === channelTwo) {
-      embed.data.url = undefined;
-    }
+    embed.data.url = undefined;
 
     console.log(channel.id);
     console.log(channelOne);
