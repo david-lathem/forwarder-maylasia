@@ -38,22 +38,29 @@ client.on(Events.MessageCreate, async (message) => {
           data.channelOne ? `<#${data.channelOne}>` : "None"
         }\n**Channel Two**: ${
           data.channelTwo ? `<#${data.channelTwo}>` : "None"
-        }\n**Destination Channel**: ${
-          data.destinationChannel ? `<#${data.destinationChannel}>` : "None"
+        }\n**Destination Channel One**: ${
+          data.destinationChannelOne
+            ? `<#${data.destinationChannelOne}>`
+            : "None"
+        }\n**Destination Channel Two**: ${
+          data.destinationChannelTwo
+            ? `<#${data.destinationChannelTwo}>`
+            : "None"
         }`
       );
     }
 
     if (cmdName === "!setChannels") {
-      if (mentions.channels.size < 3) {
+      if (mentions.channels.size < 4) {
         return await message.reply(
-          "Please mention **three channels** in format:\n`!setChannels <ChannelOne> <ChannelTwo> <DestinationChannel>`"
+          "Please mention **three channels** in format:\n`!setChannels <ChannelOne> <DestinationChannelTwo> <ChannelTwo> <DestinationChannelTwo>`"
         );
       }
 
       data.channelOne = mentions.channels.at(0).id;
-      data.channelTwo = mentions.channels.at(1).id;
-      data.destinationChannel = mentions.channels.at(2).id;
+      data.destinationChannelOne = mentions.channels.at(1).id;
+      data.channelTwo = mentions.channels.at(2).id;
+      data.destinationChannelTwo = mentions.channels.at(3).id;
 
       await fs.writeFile("./data.json", JSON.stringify(data, null, 2));
 
@@ -69,13 +76,24 @@ client.on(Events.MessageCreate, async (message) => {
 client.on(Events.MessageCreate, async (message) => {
   try {
     const { channel, content, embeds } = message;
-    const { channelOne, channelTwo, destinationChannel } = data;
+    const {
+      channelOne,
+      channelTwo,
+      destinationChannelOne,
+      destinationChannelTwo,
+    } = data;
 
     if (![channelOne, channelTwo].includes(channel.id)) return;
 
     const [embed] = embeds;
 
     if (!embed) return;
+
+    const isChannelOne = channel.id === channelOne;
+
+    const destinationChannel = isChannelOne
+      ? destinationChannelOne
+      : destinationChannelTwo;
 
     const modifiedEmbed = EmbedBuilder.from(embed)
       .setTitle("OOS Bypass Link has arrived")
@@ -85,14 +103,14 @@ client.on(Events.MessageCreate, async (message) => {
       .setFields([])
       .setTimestamp();
 
-    if (channel.id === channelOne) {
+    if (isChannelOne) {
       modifiedEmbed.setDescription(
         embed.data.fields?.[1]?.value?.replace(
           "Click Here",
           "Click Here to redirect"
         )
       );
-    } else if (channel.id === channelTwo) {
+    } else {
       modifiedEmbed.setDescription(
         embed.data.description.replace("Share Link", "Click Here to redirect")
       );
