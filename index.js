@@ -53,7 +53,7 @@ client.on(Events.MessageCreate, async (message) => {
     if (cmdName === "!setChannels") {
       if (mentions.channels.size < 4) {
         return await message.reply(
-          "Please mention **three channels** in format:\n`!setChannels <ChannelOne> <DestinationChannelTwo> <ChannelTwo> <DestinationChannelTwo>`"
+          "Please mention **four channels** in format:\n`!setChannels <ChannelOne> <DestinationChannelTwo> <ChannelTwo> <DestinationChannelTwo>`"
         );
       }
 
