@@ -51,16 +51,25 @@ client.on(Events.MessageCreate, async (message) => {
     }
 
     if (cmdName === "!setChannels") {
-      if (mentions.channels.size < 4) {
+      const args = message.content.trim().split(/\s+/).slice(1);
+      // remove the command itself
+
+      if (args.length !== 4) {
         return await message.reply(
-          "Please mention **four channels** in format:\n`!setChannels <ChannelOne> <DestinationChannelOne> <ChannelTwo> <DestinationChannelTwo>`"
+          "❌ You must provide **exactly 4 channels** like this:\n" +
+            "`!setChannels <ChannelOne> <DestinationChannelOne> <ChannelTwo> <DestinationChannelTwo>`"
         );
       }
 
-      data.channelOne = mentions.channels.at(0).id;
-      data.destinationChannelOne = mentions.channels.at(1).id;
-      data.channelTwo = mentions.channels.at(2).id;
-      data.destinationChannelTwo = mentions.channels.at(3).id;
+      // Extract channel IDs (works for <#id> or plain IDs)
+      const [ch1, dest1, ch2, dest2] = args.map((arg) =>
+        arg.replace(/[^0-9]/g, "")
+      );
+
+      data.channelOne = ch1;
+      data.destinationChannelOne = dest1;
+      data.channelTwo = ch2;
+      data.destinationChannelTwo = dest2;
 
       await fs.writeFile("./data.json", JSON.stringify(data, null, 2));
 
