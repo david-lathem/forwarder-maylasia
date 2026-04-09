@@ -121,7 +121,7 @@ client.on(Events.MessageCreate, async (message) => {
       );
     } else {
       modifiedEmbed.setDescription(
-        embed.data.description.replace("Share Link", "Click Here to redirect")
+      `[Click Here to redirect](${ embed.data.fields?.[6]?.value?.replaceAll('||','')})`
       );
     }
 
